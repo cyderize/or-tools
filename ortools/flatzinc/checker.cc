@@ -358,6 +358,13 @@ bool CheckCumulative(
   return true;
 }
 
+bool CheckCumulativeOpt(
+    const Constraint& ct,
+    const std::function<int64_t(IntegerVariable*)>& evaluator) {
+  // TODO: Implement check
+  return true;
+}
+
 bool CheckDiffn(const Constraint& ct,
                 const std::function<int64_t(IntegerVariable*)>& evaluator) {
   return true;
@@ -389,6 +396,14 @@ bool CheckDisjunctive(
 bool CheckDisjunctiveStrict(
     const Constraint& ct,
     const std::function<int64_t(IntegerVariable*)>& evaluator) {
+  // TODO: Implement check
+  return true;
+}
+
+bool CheckDisjunctiveStrictOpt(
+    const Constraint& ct,
+    const std::function<int64_t(IntegerVariable*)>& evaluator) {
+  // TODO: Implement check
   return true;
 }
 
@@ -1200,6 +1215,9 @@ CallMap CreateCallMap() {
   m["var_cumulative"] = CheckCumulative;
   m["variable_cumulative"] = CheckCumulative;
   m["fixed_cumulative"] = CheckCumulative;
+  m["ortools_cumulative_opt"] = CheckCumulativeOpt;
+  m["fzn_disjunctive_strict"] = CheckDisjunctiveStrict;
+  m["ortools_disjunctive_strict_opt"] = CheckDisjunctiveStrictOpt;
   m["fzn_diffn"] = CheckDiffn;
   m["diffn_k_with_sizes"] = CheckDiffnK;
   m["fzn_diffn_nonstrict"] = CheckDiffnNonStrict;

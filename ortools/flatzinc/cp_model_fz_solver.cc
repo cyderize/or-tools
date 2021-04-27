@@ -710,6 +710,38 @@ void CpModelProtoWithMapping::FillConstraint(const fz::Constraint& fz_ct,
         arg->add_demands(demands[i]);
       }
     }
+  } else if (fz_ct.type == "ortools_cumulative_opt") {
+    const std::vector<int> occurs = LookupVars(fz_ct.arguments[0]);
+    const std::vector<int> starts = LookupVars(fz_ct.arguments[1]);
+    const std::vector<int> durations = LookupVars(fz_ct.arguments[2]);
+    const std::vector<int> demands = LookupVars(fz_ct.arguments[3]);
+    const int capacity = LookupVar(fz_ct.arguments[4]);
+
+    auto* arg = ct->mutable_cumulative();
+    arg->set_capacity(capacity);
+    for (int i = 0; i < starts.size(); ++i) {
+      arg->add_intervals(
+          GetOrCreateOptionalInterval(starts[i], durations[i], occurs[i]));
+      arg->add_demands(demands[i]);
+    }
+  } else if (fz_ct.type == "fzn_disjunctive_strict") {
+    const std::vector<int> starts = LookupVars(fz_ct.arguments[0]);
+    const std::vector<int> durations = LookupVars(fz_ct.arguments[1]);
+
+    auto* arg = ct->mutable_no_overlap();
+    for (int i = 0; i < starts.size(); ++i) {
+      arg->add_intervals(GetOrCreateInterval(starts[i], durations[i]));
+    }
+  } else if (fz_ct.type == "ortools_disjunctive_strict_opt") {
+    const std::vector<int> occurs = LookupVars(fz_ct.arguments[0]);
+    const std::vector<int> starts = LookupVars(fz_ct.arguments[1]);
+    const std::vector<int> durations = LookupVars(fz_ct.arguments[2]);
+
+    auto* arg = ct->mutable_no_overlap();
+    for (int i = 0; i < starts.size(); ++i) {
+      arg->add_intervals(
+          GetOrCreateOptionalInterval(starts[i], durations[i], occurs[i]));
+    }
   } else if (fz_ct.type == "fzn_diffn" || fz_ct.type == "fzn_diffn_nonstrict") {
     const std::vector<int> x = LookupVars(fz_ct.arguments[0]);
     const std::vector<int> y = LookupVars(fz_ct.arguments[1]);
