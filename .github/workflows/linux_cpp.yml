@@ -18,3 +18,8 @@ jobs:
       run: CTEST_OUTPUT_ON_FAILURE=1 cmake --build build --config Release --target test -v
     - name: Install
       run: cmake --build build --config Release --target install -v -- DESTDIR=install
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux_cpp
+        path: install
